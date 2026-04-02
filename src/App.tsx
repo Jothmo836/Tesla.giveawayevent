@@ -290,9 +290,48 @@ const Navbar: React.FC = () => {
               <button onClick={toggleTheme} className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${isDark ? 'bg-gray-800 text-yellow-400' : 'bg-gray-100 text-gray-800'}`} title="Toggle Theme"><i className={`fas ${isDark ? 'fa-sun' : 'fa-moon'}`}></i></button>
             </div>
           </div>
-          <div className="md:hidden"><button onClick={() => setIsOpen(!isOpen)} className={`${isDark ? 'text-white' : 'text-black'} p-2`}><i className={`fas ${isOpen ? 'fa-times' : 'fa-bars'} text-2xl`}></i></button></div>
+          <div className="md:hidden">
+            <button onClick={() => setIsOpen(!isOpen)} className={`${isDark ? 'text-white' : 'text-black'} p-2`}>
+              <i className={`fas ${isOpen ? 'fa-times' : 'fa-bars'} text-2xl`}></i>
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isOpen && (
+        <div className={`md:hidden absolute top-full left-0 w-full border-b shadow-lg ${isDark ? 'bg-black/95 border-gray-800' : 'bg-white/95 border-gray-200'} backdrop-blur-md`}>
+          <div className="px-4 pt-2 pb-6 space-y-1 flex flex-col">
+            {NAV_LINKS.map((link) => (
+              <a 
+                key={link.label} 
+                href={link.href} 
+                onClick={(e) => {
+                  handleSmoothScroll(e, link.href);
+                  setIsOpen(false);
+                }} 
+                className={`block px-3 py-4 rounded-md text-base font-medium flex items-center gap-3 ${isDark ? 'text-gray-300 hover:bg-gray-800 hover:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-black'}`}
+              >
+                <i className={`fas ${link.icon} w-5 text-center ${isDark ? 'text-gray-500' : 'text-gray-400'}`}></i>
+                {link.label}
+              </a>
+            ))}
+            <div className={`mt-4 pt-4 border-t flex items-center justify-between px-3 ${isDark ? 'border-gray-800' : 'border-gray-200'}`}>
+              <span className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Change theme</span>
+              <button 
+                onClick={() => {
+                  toggleTheme();
+                  setIsOpen(false);
+                }} 
+                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${isDark ? 'bg-gray-800 text-yellow-400' : 'bg-gray-100 text-gray-800'}`} 
+                title="Toggle Theme"
+              >
+                <i className={`fas ${isDark ? 'fa-sun' : 'fa-moon'}`}></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
@@ -303,7 +342,7 @@ const PrizeCard: React.FC<{ car: CarOption }> = ({ car }) => {
   return (
     <div className={`p-6 rounded-2xl border transition-all ${isDark ? 'bg-[#0a0a0a] border-gray-800' : 'bg-white border-gray-200 shadow-md'}`}>
       <div className="relative h-64 rounded-xl overflow-hidden group">
-        <img src={car.image} alt={`${car.name} ${car.model}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+        <img src={car.image} alt={`${car.name} ${car.model}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" referrerPolicy="no-referrer" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
             <div>
                 <h3 className="font-bold text-2xl text-white">{car.name}</h3>
@@ -334,8 +373,9 @@ const HistoryTable: React.FC = () => {
         <div className="text-center"><div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>5,247</div><div className="text-xs text-gray-500 uppercase mt-1">Winners</div></div>
         <div className="text-center"><div className="text-2xl font-bold text-blue-500">24/7</div><div className="text-xs text-gray-500 uppercase mt-1">Support</div></div>
       </div>
-      <div className="overflow-x-auto custom-scrollbar">
-        <table className="w-full text-left text-sm">
+      {/* Desktop Table */}
+      <div className="hidden md:block overflow-x-auto">
+        <table className="w-full min-w-[800px] text-left text-sm whitespace-nowrap">
           <thead className={`text-xs uppercase ${isDark ? 'bg-black text-gray-500' : 'bg-gray-50 text-gray-600'}`}><tr className="border-b border-gray-800">
             <th className="p-5 font-medium">Location</th><th className="p-5 font-medium">Participant</th><th className="p-5 font-medium">Prize Won</th><th className="p-5 font-medium">Status</th><th className="p-5 text-right">Time</th>
           </tr></thead>
@@ -344,7 +384,7 @@ const HistoryTable: React.FC = () => {
               <tr key={tx.id} className={`${isDark ? 'hover:bg-gray-800/30' : 'hover:bg-gray-50'}`}>
                 <td className="p-5 font-medium text-xs">
                   <div className="flex items-center gap-3">
-                    <img src={`https://flagcdn.com/w20/${tx.flag}.png`} srcSet={`https://flagcdn.com/w40/${tx.flag}.png 2x`} alt="flag" className="w-5 h-auto shadow-sm rounded-sm" />
+                    <img src={`https://flagcdn.com/w20/${tx.flag}.png`} srcSet={`https://flagcdn.com/w40/${tx.flag}.png 2x`} alt="flag" className="w-5 h-auto shadow-sm rounded-sm" referrerPolicy="no-referrer" />
                     <span>{tx.location}</span>
                   </div>
                 </td>
@@ -356,6 +396,28 @@ const HistoryTable: React.FC = () => {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="block md:hidden">
+        <div className={`divide-y ${isDark ? 'divide-gray-800' : 'divide-gray-100'}`}>
+          {transactions.map((tx) => (
+            <div key={tx.id} className={`p-4 ${isDark ? 'hover:bg-gray-800/30' : 'hover:bg-gray-50'}`}>
+              <div className="flex justify-between items-start mb-2">
+                <div className="flex items-center gap-2">
+                  <img src={`https://flagcdn.com/w20/${tx.flag}.png`} srcSet={`https://flagcdn.com/w40/${tx.flag}.png 2x`} alt="flag" className="w-5 h-auto shadow-sm rounded-sm" referrerPolicy="no-referrer" />
+                  <span className="font-medium text-sm">{tx.user}</span>
+                </div>
+                <span className="text-gray-500 font-mono text-xs">{tx.time}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <div className="font-medium text-green-500 font-bold text-sm">{tx.car}</div>
+                <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${tx.status === 'Confirmed and Dispatched' ? 'text-green-500 bg-green-500/10' : 'text-yellow-500 bg-yellow-500/10'}`}>{tx.status}</span>
+              </div>
+              <div className="text-xs text-gray-500 mt-2">{tx.location}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -482,7 +544,7 @@ const MainContent: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {TESTIMONIALS.map((testimonial) => (
                     <div key={testimonial.id} className={`rounded-2xl overflow-hidden border transition-transform hover:-translate-y-2 duration-300 flex flex-col ${isDark ? 'bg-black border-gray-800' : 'bg-gray-50 border-gray-200'}`}>
-                      <img src={testimonial.image} alt={testimonial.name} className="w-full h-56 object-cover" />
+                      <img src={testimonial.image} alt={testimonial.name} className="w-full h-56 object-cover" referrerPolicy="no-referrer" />
                       <div className="p-6 flex flex-col h-full">
                         <div className="flex items-center gap-2 mb-3">
                           <i className="fas fa-star text-yellow-500 text-sm"></i>
@@ -711,7 +773,7 @@ const SpinWheel: React.FC<{ cars: CarOption[] }> = ({ cars }) => {
             </p>
             
             <div className="rounded-xl overflow-hidden mb-6 border-2 border-gray-800/50">
-              <img src={winner.image} alt={winner.name} className="w-full h-40 object-cover" />
+              <img src={winner.image} alt={winner.name} className="w-full h-40 object-cover" referrerPolicy="no-referrer" />
             </div>
             
             <p className={`text-sm mb-4 font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
