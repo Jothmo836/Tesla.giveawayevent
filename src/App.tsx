@@ -3,12 +3,12 @@ import { motion } from 'motion/react';
 import confetti from 'canvas-confetti';
 import { Transaction, CarOption } from './types';
 
-import img1 from '../assets/images/Model s.jpg';
-import img2 from '../assets/images/Model X.jpg';
-import img3 from '../assets/images/Model 3.jpg';
-import img4 from '../assets/images/Model Y.jpg';
-import img5 from '../assets/images/The truck.jpg';
-import img6 from '../assets/images/Home-charger.jpg';
+import img1 from '../assets/images/Model s.png';
+import img2 from '../assets/images/Model X.png';
+import img3 from '../assets/images/Model 3.png';
+import img4 from '../assets/images/Model Y.png';
+import img5 from '../assets/images/The truck.png';
+import img6 from '../assets/images/Home-charger(1).png';
 
 import testImg1 from '../assets/images/Jutta.jpeg';
 import testImg2 from '../assets/images/Mark.jpeg';
